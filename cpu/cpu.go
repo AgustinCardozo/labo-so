@@ -1,7 +1,11 @@
-package cpu
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/AgustinCardozo/labo-so/utils/greetings"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	message := greetings.Hello("Burak")
+	fmt.Println(message)
 }

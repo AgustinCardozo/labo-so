@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/AgustinCardozo/labo-so/utils/greetings"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	greetings.Welcome()
 }
