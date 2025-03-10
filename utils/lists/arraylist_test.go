@@ -4,8 +4,7 @@ import (
 	"testing"
 )
 
-// Test para el método Add
-func TestAdd(t *testing.T) {
+func TestArrayList_Add(t *testing.T) {
 	list := &ArrayList[int]{}
 
 	list.Add(10)
@@ -16,8 +15,7 @@ func TestAdd(t *testing.T) {
 	}
 }
 
-// Test para el método Remove
-func TestRemove(t *testing.T) {
+func TestArrayList_Remove(t *testing.T) {
 	list := &ArrayList[int]{}
 
 	list.Add(10)
@@ -31,14 +29,13 @@ func TestRemove(t *testing.T) {
 	}
 
 	value, _ := list.Get(1)
-	
+
 	if value != 30 {
 		t.Errorf("Expected 30 at index 1, got %d", value)
 	}
 }
 
-// Test para el método Size
-func TestSize(t *testing.T) {
+func TestArrayList_Size(t *testing.T) {
 	list := &ArrayList[int]{}
 
 	if list.Size() != 0 {
@@ -52,30 +49,127 @@ func TestSize(t *testing.T) {
 	}
 }
 
-// Test para el método Filter
-// func TestFilter(t *testing.T) {
-// 	list := &ArrayList[int]{}
+func TestArrayList_Filter(t *testing.T) {
+	list := &ArrayList[int]{}
 
-// 	list.Add(10)
-// 	list.Add(20)
-// 	list.Add(30)
-// 	list.Add(40)
+	list.Add(10)
+	list.Add(20)
+	list.Add(30)
+	list.Add(40)
 
-// 	filtered := list.Filter(0, func(a int, b int) bool {
-// 		return a > 20
-// 	})
+	predicate := func(a int, b int) bool {
+		return b > a
+	}
 
-// 	if filtered.Size() != 2 {
-// 		t.Errorf("Expected size 2, got %d", filtered.Size())
-// 	}
+	filtered := list.Filter(20, predicate)
 
-// 	value, err := filtered.Get(0)
-// 	if err != nil || value != 30 {
-// 		t.Errorf("Expected 30 at index 0, got %d", value)
-// 	}
+	if filtered.Size() != 2 {
+		t.Errorf("Expected size 2, got %d", filtered.Size())
+	}
 
-// 	value, err = filtered.Get(1)
-// 	if err != nil || value != 40 {
-// 		t.Errorf("Expected 40 at index 1, got %d", value)
-// 	}
-// }
+	value, err := filtered.Get(0)
+	if err != nil || value != 30 {
+		t.Errorf("Expected 30 at index 0, got %d", value)
+	}
+
+	value, err = filtered.Get(1)
+	if err != nil || value != 40 {
+		t.Errorf("Expected 40 at index 1, got %d", value)
+	}
+}
+
+func TestArrayList_Sort(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	list.Add(40)
+	list.Add(20)
+	list.Add(30)
+	list.Add(10)
+
+	predicate := func(a int, b int) bool {
+		return a < b
+	}
+
+	list.Sort(predicate)
+
+	value, err := list.Get(0)
+	if err != nil || value != 10 {
+		t.Errorf("Expected 10 at index 0, got %d", value)
+	}
+
+	value, err = list.Get(2)
+	if err != nil || value != 30 {
+		t.Errorf("Expected 30 at index 2, got %d", value)
+	}
+}
+
+func TestArrayList_Pop(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	list.Add(10)
+	list.Add(20)
+	list.Add(30)
+
+	value := list.Size()
+	if value != 3 {
+		t.Errorf("Expected size 3, got %d", value)
+	}
+
+	value, err := list.Pop()
+	if err != nil || value != 30 {
+		t.Errorf("Expected 10 at index 0, got %d", value)
+	}
+
+	value = list.Size()
+	if value != 2 {
+		t.Errorf("Expected size 2, got %d", value)
+	}
+}
+
+func TestArrayList_Pop_ThrowError(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	_, err := list.Pop()
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+}
+
+func TestArrayList_Push(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	list.Add(10)
+	list.Add(20)
+
+	value := list.Size()
+	if value != 2 {
+		t.Errorf("Expected size 2, got %d", value)
+	}
+
+	err := list.Insert(1, 30)
+	if err != nil {
+		t.Errorf("Expected nil, got %v", err)
+	}
+
+	value, err = list.Get(1)
+	if err != nil || value != 30 {
+		t.Errorf("Expected 30 at index 1, got %d", value)
+	}
+
+	value = list.Size()
+	if value != 3 {
+		t.Errorf("Expected size 3, got %d", value)
+	}
+}
+
+func TestArrayList_Insert_ThrowError(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	list.Add(10)
+	list.Add(20)
+
+	err := list.Insert(4, 30)
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+}
