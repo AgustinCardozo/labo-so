@@ -12,11 +12,15 @@ import (
 	"rsc.io/quote"
 )
 
+const (
+	ConfigPath = "./configs/kernel.json"
+)
+
 func main() {
 	fmt.Println("Hello World")
 	fmt.Println(quote.Hello())
 
-	config.InitConfig("./configs/kernel.json", &globals.ConfigKernel)
+	config.InitConfig(ConfigPath, &globals.ConfigKernel)
 
 	http.HandleFunc("/", handlers.HandshakeHandler("Memoria en funcionamiento 🚀"))
 

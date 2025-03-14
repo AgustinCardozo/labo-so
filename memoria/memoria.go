@@ -11,6 +11,10 @@ import (
 	"net/http"
 )
 
+const (
+	ConfigPath = "./configs/memoria.json"
+)
+
 func main() {
 	var numberList list.ArrayList[int]
 
@@ -20,11 +24,11 @@ func main() {
 
 	fmt.Println(numberList.Size())
 
-	config.InitConfig("./configs/memoria.json", &globals.ConfigMemoria)
+	config.InitConfig(ConfigPath, &globals.ConfigMemoria)
 	fmt.Printf("Port: %d", globals.ConfigMemoria.Port)
 
 	http.HandleFunc("/", handlers.HandshakeHandler("Memoria en funcionamiento 🚀"))
-	http.HandleFunc("/memoria/", handlersMemoria.HelloWorldHandler)
+	http.HandleFunc("/memoria", handlersMemoria.HelloWorldHandler)
 
 	err := server.InitServer(globals.ConfigMemoria.Port)
 	if err != nil {
