@@ -5,13 +5,14 @@ import "fmt"
 // List Definir la interfaz List
 type List[T any] interface {
 	Add(item T)                                          // Añadir un elemento al final de la lista
+	Dequeue() (T, error)								 // Eliminar y devolver el primer elemento de la lista
 	Filter(value T, predicate func(a, b T) bool) List[T] // Filtra elementos de la lista
 	Get(index int) (T, error)                            // Obtener un elemento a partir de un índice dado
 	Insert(index int, item T) error                      // Insertar un elemento en el índice dado
 	Pop() (T, error)                                     // Remover el último elemento de la lista
 	Remove(index int)                                    // Eliminar un elemento en el índice dado
 	Size() int                                           // Retornar el tamaño de la lista
-	Sort(less func(a, b T) bool)                         // Sort Ordena una Lista de acuerdo al criterio
+	Sort(less func(a, b T) bool)                         // Ordena una Lista de acuerdo al criterio
 }
 
 // ArrayList implements List
@@ -22,16 +23,29 @@ type ArrayList[T any] struct {
 /*
 * Add: Inserta un elemento al final de la lista.
 * @param item: Elemento a insertar.
- */
+*/
 func (list *ArrayList[T]) Add(item T) {
 	list.items = append(list.items, item)
+}
+
+/*
+* Dequeue: Elimina y devuelve el primer elemento de la cola.
+*/
+func (list *ArrayList[T]) Dequeue() (T, error) {
+	if len(list.items) == 0 {
+		var zero T // Devuelve el valor "cero" del tipo T
+		return zero, fmt.Errorf("La cola está vacía")
+	}
+	valor := list.items[0]
+	list.items = list.items[1:]
+	return valor, nil
 }
 
 /*
 * Filter: Filtra elementos de la lista en base a un predicado.
 * @param value: Valor a comparar.
 * @param predicate: Función que compara dos elementos.
- */
+*/
 func (list *ArrayList[T]) Filter(value T, predicate func(a, b T) bool) List[T] {
 	filteredList := &ArrayList[T]{}
 
@@ -47,7 +61,7 @@ func (list *ArrayList[T]) Filter(value T, predicate func(a, b T) bool) List[T] {
 /*
 * Get: Devuelve el elemento en el índice proporcionado.
 * @param index: Índice del elemento a obtener.
- */
+*/
 func (list *ArrayList[T]) Get(index int) (T, error) {
 	// Validar si el índice está dentro del rango
 	if index < 0 || index >= len(list.items) {
@@ -62,7 +76,7 @@ func (list *ArrayList[T]) Get(index int) (T, error) {
 * Insert: Inserta un elemento en la lista en el índice proporcionado.
 * @param index: Índice donde se va a ingresar el elemento.
 * @param item:  Elemento a ingresar.
- */
+*/
 func (list *ArrayList[T]) Insert(index int, item T) error {
 	if index < 0 || index > len(list.items) {
 		return fmt.Errorf("index out of range: %d", index)
@@ -73,7 +87,7 @@ func (list *ArrayList[T]) Insert(index int, item T) error {
 
 /*
 * Pop: Remueve el último elemento de la lista y lo devuelve.
- */
+*/
 func (list *ArrayList[T]) Pop() (T, error) {
 	if len(list.items) == 0 {
 		var zero T
@@ -89,7 +103,7 @@ func (list *ArrayList[T]) Pop() (T, error) {
 * Remove: Remueve un elemento de la lista en base a su índice.
 * @param list: lista de cualquier tipo.
 * @param index: Índice del elemento a remover.
- */
+*/
 func (list *ArrayList[T]) Remove(index int) {
 	if index >= 0 && index < len(list.items) {
 		list.items = append(list.items[:index], list.items[index+1:]...)
@@ -98,7 +112,7 @@ func (list *ArrayList[T]) Remove(index int) {
 
 /*
 * Size: Devuelve el tamaño de la lista.
- */
+*/
 func (list *ArrayList[T]) Size() int {
 	return len(list.items)
 }
@@ -106,7 +120,7 @@ func (list *ArrayList[T]) Size() int {
 /*
 * Sort: Ordena una lista de acuerdo a un criterio.
 * @param less: Función que compara dos elementos.
- */
+*/
 func (list *ArrayList[T]) Sort(less func(a, b T) bool) {
 	size := list.Size()
 	for i := 0; i < size-1; i++ {

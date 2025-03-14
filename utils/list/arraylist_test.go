@@ -126,6 +126,34 @@ func TestArrayList_Pop(t *testing.T) {
 	}
 }
 
+func TestArrayList_Dequeue(t *testing.T) {
+	list := &ArrayList[int]{}
+
+	list.Add(10)
+	list.Add(20)
+	list.Add(30)
+
+	value := list.Size()
+	if value != 3 {
+		t.Errorf("Expected size 3, got %d", value)
+	}
+
+	value, err := list.Dequeue()
+	if err != nil || value != 10 {
+		t.Errorf("Expected 10 at index 0, got %d", value)
+	}
+
+	value = list.Size()
+	if value != 2 {
+		t.Errorf("Expected size 2, got %d", value)
+	}
+
+	value, err = list.Get(0)
+	if err != nil || value != 20 {
+		t.Errorf("Expected 20 at index 0, got %d", value)
+	}
+}
+
 func TestArrayList_Pop_ThrowError(t *testing.T) {
 	list := &ArrayList[int]{}
 
