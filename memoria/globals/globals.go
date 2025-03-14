@@ -10,4 +10,4 @@ type MemoriaConfig struct {
 	Resources  []string `json:"resources"`
 }
 
-var Config *MemoriaConfig
+var ConfigMemoria *MemoriaConfig

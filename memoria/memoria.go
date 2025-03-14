@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/AgustinCardozo/labo-so/memoria/globals"
+	handlersMemoria "github.com/AgustinCardozo/labo-so/memoria/handlers"
 	"github.com/AgustinCardozo/labo-so/utils/config"
 	"github.com/AgustinCardozo/labo-so/utils/list"
+	"github.com/AgustinCardozo/labo-so/utils/web/server"
+	"github.com/AgustinCardozo/labo-so/utils/web/server/handlers"
+	"net/http"
 )
 
 func main() {
@@ -16,20 +20,15 @@ func main() {
 
 	fmt.Println(numberList.Size())
 
-	err := config.SetupConfig("./configs/memoria.json", &globals.Config)
+	config.InitConfig("./configs/memoria.json", &globals.ConfigMemoria)
+	fmt.Printf("Port: %d", globals.ConfigMemoria.Port)
+
+	http.HandleFunc("/", handlers.HandshakeHandler("Memoria en funcionamiento 🚀"))
+	http.HandleFunc("/memoria/", handlersMemoria.HelloWorldHandler)
+
+	err := server.InitServer(globals.ConfigMemoria.Port)
 	if err != nil {
+		fmt.Errorf("error initializing server: %v", err)
 		panic(err)
 	}
-
-	fmt.Println(globals.Config.Resources)
-
-	//log.Logger.Info(fmt.Sprint(globals.Config.Resources))
-	//log.Logger.Info(fmt.Sprint(globals.Config))
-	//
-	//log.SugarLogger.Infof("Port: %s", globals.Config.Port)
-	//// o bien
-	//
-	//err = errors.New("Soy un error")
-	//log.SugarLogger.Errorf("Error %v", err)
-	//log.Error.JSON(err.Error())
 }
