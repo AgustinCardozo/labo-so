@@ -163,7 +163,7 @@ func TestArrayList_Pop_ThrowError(t *testing.T) {
 	}
 }
 
-func TestArrayList_Push(t *testing.T) {
+func TestArrayList_Insert(t *testing.T) {
 	list := &ArrayList[int]{}
 
 	list.Add(10)
