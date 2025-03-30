@@ -25,7 +25,7 @@ func TestSetupConfig(t *testing.T) {
 	tempFile.Seek(0, 0) // Reset file pointer
 
 	var config TestConfig
-	err = SetupConfig(tempFile.Name(), &config)
+	err = setupConfig(tempFile.Name(), &config)
 	if err != nil {
 		t.Errorf("Expected no error, got: %v", err)
 	}
@@ -35,7 +35,7 @@ func TestSetupConfig(t *testing.T) {
 }
 
 func TestSetupConfig_ThrowError(t *testing.T) {
-	err := SetupConfig("nonexistent.json", &TestConfig{})
+	err := setupConfig("nonexistent.json", &TestConfig{})
 	if err == nil {
 		t.Error("Expected error for non-existent file, got nil")
 	}

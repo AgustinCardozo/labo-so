@@ -7,14 +7,14 @@ import (
 )
 
 func InitConfig(filePath string, config interface{}) {
-	err := SetupConfig(filePath, &config)
+	err := setupConfig(filePath, &config)
 	if err != nil {
-		fmt.Errorf("Error setting up configuration file: %v", err)
+		fmt.Errorf("Error al configurar el archivo: %v", err)
 		panic(err)
 	}
 }
 
-func SetupConfig(filePath string, config interface{}) error {
+func setupConfig(filePath string, config interface{}) error {
 	configFile, err := os.Open(filePath)
 
 	if err != nil {
