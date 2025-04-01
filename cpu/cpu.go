@@ -11,7 +11,7 @@ import (
 
 const (
 	ConfigPath = "./config/cpu.json"
-	LogPath    = "./logs/cpu.log"
+	LogPath    = "cpu.log"
 )
 
 func main() {
